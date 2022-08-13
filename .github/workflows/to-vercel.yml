@@ -2,6 +2,13 @@ name: Deploy to production
 
 on:
   workflow_call:
+    secrets:
+      VERCEL_TOKEN:
+        required: true
+      VERCEL_ORG_ID:
+        required: true
+      VERCEL_PROJECT_ID:
+        required: true
 
 jobs:
   deploy:
