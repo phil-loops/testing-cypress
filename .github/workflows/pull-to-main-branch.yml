@@ -5,11 +5,17 @@ on:
     branches:
       - main
 
+  workflow_call:
+
 jobs:
-  check-then-deploy:
+  run-cypress-checks:
+    uses: PhilBrockman/testing-cypress/.github/workflows/run-cypress-checks.yml@main
+
+  release:
+    needs: [run-cypress-checks]
     steps:
-      - uses: PhilBrockman/testing-cypress/.github/workflows/run-cypress-checks.yml@main
-      - uses: PhilBrockman/testing-cypress/.github/workflows/to-vercel.yml@main
+      - name: Deploy Checked Project to Vercel
+        uses: PhilBrockman/testing-cypress/.github/workflows/to-vercel.yml@main
         secrets:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID}}
