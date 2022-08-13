@@ -1,18 +1,13 @@
-name: Run Cypress before pushing to production
+name: Runs every push
 
 on:
-  pull_request:
+  push:
     branches:
       - main
 
 jobs:
-  run-cypress-checks:
-    name: Run Cypress in cloud
-    uses: PhilBrockman/testing-cypress/.github/workflows/run-cypress-checks.yml@main
-
   release:
     name: Deploy to production
-    needs: [run-cypress-checks]
     uses: PhilBrockman/testing-cypress/.github/workflows/to-vercel.yml@main
     secrets:
       VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
