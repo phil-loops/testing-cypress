@@ -13,7 +13,6 @@ jobs:
   release:
     name: Deploy to production
     needs: [run-cypress-checks]
-    name: Deploy Checked Project to Vercel
     uses: PhilBrockman/testing-cypress/.github/workflows/to-vercel.yml@main
     secrets:
       VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
