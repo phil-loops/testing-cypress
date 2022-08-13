@@ -1,0 +1,13 @@
+name: deploy  website
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  call-workflow1:
+    uses: PhilBrockman/testing-cypress/.github/workflows/run-cypress-checks.yml
+
+  call-workflow2:
+    uses: PhilBrockman/testing-cypress/.github/workflows/to-vercel.yml
