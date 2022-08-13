@@ -7,7 +7,7 @@ on:
 
 jobs:
   call-workflow1:
-    uses: PhilBrockman/testing-cypress/.github/workflows/run-cypress-checks.yml
+    uses: PhilBrockman/testing-cypress/.github/workflows/run-cypress-checks.yml@main
 
   call-workflow2:
-    uses: PhilBrockman/testing-cypress/.github/workflows/to-vercel.yml
+    uses: PhilBrockman/testing-cypress/.github/workflows/to-vercel.yml@main
