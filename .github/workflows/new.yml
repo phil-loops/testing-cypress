@@ -34,7 +34,7 @@ jobs:
       - name: checkout repo
         uses: actions/checkout@v3
         with:
-          ref: ${{ github.event.issue.pull_request.head.ref }}
+          ref: ${{ needs.pr_commented.outputs.ref }}
       - name: install dependencies
         run: npm install
       - name: run cypress
@@ -44,7 +44,7 @@ jobs:
       - name: push to vercel
         uses: amondnet/vercel-action@v20
         with:
-          ref: ${{ github.event.issue.pull_request.head.ref }}
+          ref: ${{ needs.pr_commented.outputs.ref }}
           vercel-token: ${{ secrets.VERCEL_TOKEN }}
           vercel-org-id: ${{ secrets.VERCEL_ORG_ID}}
           vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID}}
