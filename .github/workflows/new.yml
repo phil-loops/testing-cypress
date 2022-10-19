@@ -1,6 +1,12 @@
 on: issue_comment
 
 jobs:
+  always:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Always run
+        run: echo "This job always runs"
+
   pr_commented:
     # This job only runs for pull request comments
     name: PR comment
