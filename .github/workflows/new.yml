@@ -10,6 +10,7 @@ jobs:
       # opt_in is true if the comment body contains the string "!test"
       opt_in: ${{ contains(github.event.comment.body, '!test') }}
       merge: ${{ contains(github.event.comment.body, '!!test!!') }}
+      ref: ${{ github.event.issue.pull_request.head.ref }}
 
     steps:
       # print if they opted in or not
@@ -22,23 +23,45 @@ jobs:
   checkout-repo:
     name: they said !test!
 
-    #only runs if the previous job's opt_in output is true
+    # This job only runs if the previous job opted in
     needs: pr_commented
     if: needs.pr_commented.outputs.opt_in == 'true'
 
-    uses: phil-loops/testing-cypress/.github/workflows/run-cypress-checks.yml@main
+    runs-on: ubuntu-latest
+    environment: committing to vercel
 
-  commit-to-vercel:
-    name: Push to Vercel
-    needs: checkout-repo
-    if: needs.pr_commented.outputs.merge == 'true'
-    uses: phil-loops/testing-cypress/.github/workflows/deploy-to-vercel.yml@main
+    steps:
+      - name: checkout repo
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.issue.pull_request.head.ref }}
+      - name: install dependencies
+        run: npm install
+      - name: run cypress
+        uses: cypress-io/github-action@v4
+        with:
+          start: npm run dev
+      - name: push to vercel
+        uses: amondnet/vercel-action@v20
+        with:
+          ref: ${{ github.event.issue.pull_request.head.ref }}
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID}}
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID}}
 
-    secrets: inherit
-  #   steps:
-  #     - uses: actions/checkout@v3
-  #       with:
-  #         ref: ${{ github.event.issue.pull_request.head.ref }}
+    # uses: phil-loops/testing-cypress/.github/workflows/run-cypress-checks.yml@main
+
+  # commit-to-vercel:
+  #   name: Push to Vercel
+  #   needs: checkout-repo
+  #   if: needs.pr_commented.outputs.merge == 'true'
+  #   uses: phil-loops/testing-cypress/.github/workflows/deploy-to-vercel.yml@main
+
+  #   secrets: inherit
+  # #   steps:
+  # #     - uses: actions/checkout@v3
+  # #       with:
+  # #         ref: ${{ github.event.issue.pull_request.head.ref }}
   #         repository: ${{ github.event.issue.pull_request.head.repo.full_name }}
 
   # run-cypress:
