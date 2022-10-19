@@ -4,7 +4,7 @@ jobs:
   pr_commented:
     # This job only runs for pull request comments
     name: PR comment
-    if: ${{ github.event.issue.pull_request }}
+    if: github.event.issue.pull_request
     runs-on: ubuntu-latest
     outputs:
       # opt_in is true if the comment body contains the string "!test"
