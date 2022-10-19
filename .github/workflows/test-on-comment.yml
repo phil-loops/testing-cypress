@@ -45,7 +45,7 @@ jobs:
               const result = await github.pulls.get(request)
               core.info(`Got PR #${request.pull_number} from ${request.owner}/${request.repo}`)
               core.info(JSON.stringify(result.data, undefined, 2))
-              return result.data.head.sha
+              return result.data.head.ref
             } catch (err) {
               core.setFailed(`Request failed with error ${err}`)
             }
@@ -53,11 +53,13 @@ jobs:
       - name: print branch name
         run: echo ${{ steps.get-branch.outputs.result }}
 
+      - name: Repo name
+        run: echo ${{ github.repository }}
+
       - name: Checkout PR
         uses: actions/checkout@v3
         with:
           ref: ${{ steps.get-branch.outputs.result }}
-          token: ${{ secrets.GITHUB_TOKEN }}
 
       # - name: install dependencies
       #   run: npm install
