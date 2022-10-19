@@ -31,6 +31,8 @@ jobs:
     environment: committing to vercel
 
     steps:
+      - run: echo "ref is ${{ needs.pr_commented.outputs.ref }}"
+      - run: echo "I'm running on ${{ github.event.issue.pull_request.head.ref }}"
       - name: checkout repo
         uses: actions/checkout@v3
         with:
