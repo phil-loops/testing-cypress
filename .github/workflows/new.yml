@@ -1,0 +1,44 @@
+on: issue_comment
+
+jobs:
+  pr_commented:
+    # This job only runs for pull request comments
+    name: PR comment
+    if: ${{ github.event.issue.pull_request }}
+    runs-on: ubuntu-latest
+    outputs:
+      # opt_in is true if the comment body contains the string "!test"
+      opt_in: ${{ contains(github.event.comment.body, '!test') }}
+      # pr_url is the URL of the pull request
+      pr_url: ${{ github.event.issue.pull_request.url }}
+
+  checkout-repo:
+    name: Checkout repo
+
+    #only runs if the previous job's opt_in output is true
+    needs: pr_commented
+    if: ${{ needs.pr_commented.opt_in }}
+
+    # https://github.com/actions/checkout/issues/331#issuecomment-707103442
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/github-script@v3
+        id: get-pr
+        with:
+          script: |
+            const request = {
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: context.issue.number
+            }
+            core.info(`Getting PR #${request.pull_number} from ${request.owner}/${request.repo}`)
+            try {
+              const result = await github.pulls.get(request)
+              return result.data
+            } catch (err) {
+              core.setFailed(`Request failed with error ${err}`)
+            }
+      - uses: actions/checkout@v2
+        with:
+          repository: ${{ fromJSON(steps.get-pr.outputs.result).head.repo.full_name }}
+          ref: ${{ fromJSON(steps.get-pr.outputs.result).head.sha }}
