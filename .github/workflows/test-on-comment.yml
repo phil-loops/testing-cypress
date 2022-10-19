@@ -31,6 +31,9 @@ jobs:
     environment: committing to vercel
 
     steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
       - uses: actions/github-script@v3
         id: get-branch
         with:
