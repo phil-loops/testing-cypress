@@ -16,8 +16,6 @@ jobs:
     outputs:
       # opt_in is true if the comment body contains the string "!test"
       opt_in: ${{ contains(github.event.comment.body, '!test') }}
-      # pr_url is the URL of the pull request
-      pr_url: ${{ github.event.issue.pull_request.url }}
 
     steps:
       # print if they opted in or not
@@ -36,7 +34,7 @@ jobs:
 
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@${{ github.event.issue.pull_request.head.sha }}
+      - uses: actions/checkout@v3
         with:
           ref: ${{ github.event.issue.pull_request.head.ref }}
           repository: ${{ github.event.issue.pull_request.head.repo.full_name }}
