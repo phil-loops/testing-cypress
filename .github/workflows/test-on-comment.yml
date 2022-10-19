@@ -9,7 +9,8 @@ jobs:
     outputs:
       # opt_in is true if the comment body contains the string "!test"
       opt_in: ${{ contains(github.event.comment.body, '!test') }}
-      merge: ${{ contains(github.event.comment.body, '!!test!!') }}
+      # uncomment to opt in to pushing to vercel
+      # merge: ${{ contains(github.event.comment.body, '!!test!!') }}
     steps:
       - name: Check for opt-in
         run: echo "opt_in=${{ contains(github.event.comment.body, '!test') }}" >> $GITHUB_OUTPUT
@@ -31,24 +32,18 @@ jobs:
         id: get-pr
         with:
           script: |
-            const request = {
+            const pr = await github.pulls.get({
               owner: context.repo.owner,
               repo: context.repo.repo,
               pull_number: context.issue.number
-            }
-            core.info(`Getting PR #${request.pull_number} from ${request.owner}/${request.repo}`)
-            try {
-              const result = await github.pulls.get(request)
-              return result.data
-            } catch (err) {
-              core.setFailed(`Request failed with error ${err}`)
-            }
+            })
+            return pr.data
 
       - name: checkout PR
         uses: actions/checkout@v3
         with:
           repository: ${{ fromJSON(steps.get-pr.outputs.result).head.repo.full_name }}
-          ref: ${{ fromJSON(steps.get-pr.outputs.result).head.sha }} # or .head.ref for branch name
+          ref: ${{ fromJSON(steps.get-pr.outputs.result).head.sha }}
 
       - name: install dependencies
         run: npm install
@@ -58,10 +53,13 @@ jobs:
         with:
           start: npm run dev
 
-      - name: push to vercel
-        uses: amondnet/vercel-action@v20
-        if: needs.pr_commented.outputs.merge == 'true'
-        with:
-          vercel-token: ${{ secrets.VERCEL_TOKEN }}
-          vercel-org-id: ${{ secrets.VERCEL_ORG_ID}}
-          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID}}
+      #########
+      # for future use
+      ########
+      # - name: push to vercel
+      #   uses: amondnet/vercel-action@v20
+      #   if: needs.pr_commented.outputs.merge == 'true'
+      #   with:
+      #     vercel-token: ${{ secrets.VERCEL_TOKEN }}
+      #     vercel-org-id: ${{ secrets.VERCEL_ORG_ID}}
+      #     vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID}}
