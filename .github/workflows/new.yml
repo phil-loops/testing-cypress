@@ -2,6 +2,7 @@ on: issue_comment
 
 jobs:
   always:
+    name: I always run
     runs-on: ubuntu-latest
     steps:
       - name: Always run
@@ -9,7 +10,7 @@ jobs:
 
   pr_commented:
     # This job only runs for pull request comments
-    name: PR comment
+    name: I run on PR comment
     if: github.event.issue.pull_request
     runs-on: ubuntu-latest
     outputs:
@@ -27,7 +28,7 @@ jobs:
           NUMBER: ${{ github.event.issue.number }}
 
   checkout-repo:
-    name: Checkout repo
+    name: they said !test!
 
     #only runs if the previous job's opt_in output is true
     needs: pr_commented
