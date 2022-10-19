@@ -32,10 +32,10 @@ jobs:
         id: get-pr
         with:
           script: |
-            const pr = await github.pulls.get({
+            const pr = await github.rest.issues.get({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              pull_number: context.issue.number
+              issue_number: context.issue.number
             })
             return pr.data
 
