@@ -10,15 +10,17 @@ jobs:
       # opt_in is true if the comment body contains the string "!test"
       opt_in: ${{ contains(github.event.comment.body, '!test') }}
       merge: ${{ contains(github.event.comment.body, '!!test!!') }}
+      issue_number: ${{ github.event.issue.number }}
       ref: ${{ github.event.issue.pull_request.head.ref }}
+      repo: ${{ github.event.issue.pull_request.head.repo.full_name }}
+      sha: ${{ github.event.issue.pull_request.head.sha }}
 
     steps:
       # print if they opted in or not
       - run: |
           echo "opt_in: ${{ contains(github.event.comment.body, '!test') }}"
           echo "pr_url: ${{ github.event.issue.pull_request.url }}"
-        env:
-          NUMBER: ${{ github.event.issue.number }}
+          echo "sha: ${{ github.event.issue.pull_request.head.sha }}"
 
   checkout-repo:
     name: they said !test!
@@ -31,20 +33,32 @@ jobs:
     environment: committing to vercel
 
     steps:
-      - name: checkout repo
+      - run: echo "I'm running on ${{ needs.pr_commented.outputs.issue_number }}"
+      - run: echo "I'm running on ${{ needs.pr_commented.outputs.ref }}"
+      - run: echo "I'm running on ${{ needs.pr_commented.outputs.repo }}"
+      - run: echo "I'm running on ${{ needs.pr_commented.outputs.sha }}"
+
+      - name: Checkout
         uses: actions/checkout@v3
         with:
-          ref: ${{ github.event.issue.pull_request.head.ref }}
+          ref: ${{ needs.pr_commented.outputs.ref }}
+          repository: ${{ needs.pr_commented.outputs.repo }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Checkout Pull Request
+        run: hub pr checkout ${{ needs.pr_commented.outputs.issue_number }}
+
       - name: install dependencies
         run: npm install
+
       - name: run cypress
         uses: cypress-io/github-action@v4
         with:
           start: npm run dev
+
       - name: push to vercel
         uses: amondnet/vercel-action@v20
         with:
-          ref: ${{ github.event.issue.pull_request.head.ref }}
           vercel-token: ${{ secrets.VERCEL_TOKEN }}
           vercel-org-id: ${{ secrets.VERCEL_ORG_ID}}
           vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID}}
