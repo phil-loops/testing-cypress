@@ -53,6 +53,7 @@ jobs:
             } catch (err) {
               core.setFailed(`Request failed with error ${err}`)
             }
+
       - uses: actions/checkout@v2
         with:
           repository: ${{ fromJSON(steps.get-pr.outputs.result).head.repo.full_name }}
