@@ -33,6 +33,10 @@ jobs:
     needs: checkout-repo
     if: needs.pr_commented.outputs.merge
     uses: phil-loops/testing-cypress/.github/workflows/deploy-to-vercel.yml@main
+    secrets:
+      VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+      VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID}}
+      VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID}}
   #   steps:
   #     - uses: actions/checkout@v3
   #       with:
