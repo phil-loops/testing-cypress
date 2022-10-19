@@ -1,0 +1,22 @@
+name: Deploy to vercel
+
+on:
+  workflow_call:
+    secrets:
+      VERCEL_TOKEN:
+        required: true
+      VERCEL_ORG_ID:
+        required: true
+      VERCEL_PROJECT_ID:
+        required: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: amondnet/vercel-action@v20
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID}}
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID}}

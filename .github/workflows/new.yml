@@ -9,6 +9,7 @@ jobs:
     outputs:
       # opt_in is true if the comment body contains the string "!test"
       opt_in: ${{ contains(github.event.comment.body, '!test') }}
+      merge: ${{ contains(github.event.comment.body, '!!test!!') }}
 
     steps:
       # print if they opted in or not
@@ -26,6 +27,12 @@ jobs:
     if: needs.pr_commented.outputs.opt_in
 
     uses: phil-loops/testing-cypress/.github/workflows/run-cypress-checks.yml@main
+
+  commit-to-vercel:
+    name: Push to Vercel
+    needs: checkout-repo
+    if: needs.pr_commented.outputs.merge
+    uses: phil-loops/testing-cypress/.github/workflows/deploy-to-vercel.yml@main
   #   steps:
   #     - uses: actions/checkout@v3
   #       with:
