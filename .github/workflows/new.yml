@@ -10,9 +10,20 @@ jobs:
       # opt_in is true if the comment body contains the string "!test"
       opt_in: ${{ contains(github.event.comment.body, '!test') }}
       merge: ${{ contains(github.event.comment.body, '!!test!!') }}
+
+  checkout-repo:
+    name: they said !test!
+
+    # This job only runs if the previous job opted in
+    needs: pr_commented
+    if: needs.pr_commented.outputs.opt_in == 'true'
+
+    runs-on: ubuntu-latest
+    environment: committing to vercel
+
     steps:
-      # find the PR from the issue comment
-      - uses: actions/github-script@v3
+      - name: find PR
+        uses: actions/github-script@v3
         id: get-pr
         with:
           script: |
@@ -28,23 +39,13 @@ jobs:
             } catch (err) {
               core.setFailed(`Request failed with error ${err}`)
             }
-      # checkout the PR
-      - uses: actions/checkout@v3
+
+      - name: checkout PR
+        uses: actions/checkout@v3
         with:
           repository: ${{ fromJSON(steps.get-pr.outputs.result).head.repo.full_name }}
           ref: ${{ fromJSON(steps.get-pr.outputs.result).head.sha }} # or .head.ref for branch name
 
-  checkout-repo:
-    name: they said !test!
-
-    # This job only runs if the previous job opted in
-    needs: pr_commented
-    if: needs.pr_commented.outputs.opt_in == 'true'
-
-    runs-on: ubuntu-latest
-    environment: committing to vercel
-
-    steps:
       - name: install dependencies
         run: npm install
 
