@@ -33,9 +33,9 @@ jobs:
         with:
           script: |
             console.log('finding PR')
-            console.log("owner: ${{context.repo.owner}}")
-            console.log("repo: ${{context.repo.repo}}")
-            console.log("issue number: ${{context.issue.number}}")
+            console.log(`owner: ${context.repo.owner}`)
+            console.log(`repo: ${context.repo.repo}`)
+            console.log(`issue number: ${context.issue.number}`)
 
             const pr = await github.rest.issues.get({
               owner: context.repo.owner,
