@@ -19,8 +19,14 @@ jobs:
       - run: |
           echo "opt_in: ${{ contains(github.event.comment.body, '!test') }}"
           echo "pr_url: ${{ github.event.issue.pull_request.url }}"
+      - name: Get Branch name
+        id: branchName
+        run: |
+          echo ::set-output name=branch::$(echo $PR_COMMENT | cut -d "[" -f2 | cut -d "]" -f1)
         env:
-          NUMBER: ${{ github.event.issue.number }}
+          PR_COMMENT: ${{ github.event.comment.body }}
+      - run: |
+          echo "branch: ${{ steps.branchName.outputs.branch }}"
 
   checkout-repo:
     name: they said !test!
