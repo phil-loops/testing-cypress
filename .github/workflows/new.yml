@@ -32,7 +32,7 @@ jobs:
 
     #only runs if the previous job's opt_in output is true
     needs: pr_commented
-    if: needs.pr_commented.opt_in
+    if: needs.pr_commented.outputs.opt_in
 
     # https://github.com/actions/checkout/issues/331#issuecomment-707103442
     runs-on: ubuntu-latest
