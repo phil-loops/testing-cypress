@@ -58,5 +58,4 @@ jobs:
           repository: ${{ fromJSON(steps.get-pr.outputs.result).head.repo.full_name }}
           ref: ${{ fromJSON(steps.get-pr.outputs.result).head.sha }}
 
-      - name: Run Cypress in cloud
-        uses: phil-loops/testing-cypress/.github/workflows/run-cypress-checks.yml@main
+      - uses: phil-loops/testing-cypress/.github/workflows/run-cypress-checks.yml@main
