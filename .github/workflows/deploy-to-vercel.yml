@@ -8,7 +8,6 @@ jobs:
     runs-on: ubuntu-latest
     environment: committing to vercel
     steps:
-      - uses: actions/checkout@v3
       - uses: amondnet/vercel-action@v20
         with:
           ref: ${{ github.event.issue.pull_request.head.ref }}
