@@ -50,21 +50,21 @@ jobs:
               core.setFailed(`Request failed with error ${err}`)
             }
 
-      - name: get data
+      # - name: get data
 
-      - name: Checkout PR
-        uses: actions/checkout@v3
-        with:
-          ref: ${{ steps.get-pr.outputs.data.head.ref }}
-          token: ${{ secrets.GITHUB_TOKEN }}
+      # - name: Checkout PR
+      #   uses: actions/checkout@v3
+      #   with:
+      #     ref: ${{ steps.get-pr.outputs.data.head.ref }}
+      #     token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: install dependencies
-        run: npm install
+      # - name: install dependencies
+      #   run: npm install
 
-      - name: run cypress
-        uses: cypress-io/github-action@v4
-        with:
-          start: npm run dev
+      # - name: run cypress
+      #   uses: cypress-io/github-action@v4
+      #   with:
+      #     start: npm run dev
 
       #########
       # for future use
