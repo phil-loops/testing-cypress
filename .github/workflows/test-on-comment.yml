@@ -48,6 +48,7 @@ jobs:
       - name: safety check
         run: |
           echo "last result: ${{ fromJSON(steps.get-pr.outputs.result) }}"
+          echo "last result: ${{ fromJSON(steps.get-pr.outputs.result).head }}"
           echo "PR: ${{ fromJSON(steps.get-pr.outputs.result).head.repo.full_name }}"
           echo "sha: ${{ fromJSON(steps.get-pr.outputs.result).head.sha }}"
           echo "ref: ${{ fromJSON(steps.get-pr.outputs.result).head.ref }}"
