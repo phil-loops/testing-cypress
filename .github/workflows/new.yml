@@ -19,20 +19,21 @@ jobs:
         env:
           NUMBER: ${{ github.event.issue.number }}
 
-  checkout-repo:
-    name: they said !test!
+  # checkout-repo:
+  #   name: they said !test!
 
-    #only runs if the previous job's opt_in output is true
-    needs: pr_commented
-    if: needs.pr_commented.outputs.opt_in
+  #   #only runs if the previous job's opt_in output is true
+  #   needs: pr_commented
+  #   if: needs.pr_commented.outputs.opt_in
 
-    uses: phil-loops/testing-cypress/.github/workflows/run-cypress-checks.yml@main
+  #   uses: phil-loops/testing-cypress/.github/workflows/run-cypress-checks.yml@main
 
   commit-to-vercel:
     name: Push to Vercel
     needs: pr_commented
     if: needs.pr_commented.outputs.merge
     uses: phil-loops/testing-cypress/.github/workflows/deploy-to-vercel.yml@main
+
     secrets: inherit
   #   steps:
   #     - uses: actions/checkout@v3
