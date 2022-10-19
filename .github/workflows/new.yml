@@ -24,7 +24,7 @@ jobs:
 
     #only runs if the previous job's opt_in output is true
     needs: pr_commented
-    if: needs.pr_commented.outputs.opt_in
+    if: needs.pr_commented.outputs.opt_in == 'true'
 
     uses: phil-loops/testing-cypress/.github/workflows/run-cypress-checks.yml@main
 
