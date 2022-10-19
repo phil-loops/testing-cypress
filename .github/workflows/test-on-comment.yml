@@ -31,16 +31,17 @@ jobs:
         uses: actions/github-script@v6
         id: get-pr
         with:
+          result-encoding: string
           script: |
             console.log('finding PR')
             console.log(`owner: ${context.repo.owner}`)
             console.log(`repo: ${context.repo.repo}`)
             console.log(`issue number: ${context.issue.number}`)
 
-            const pr = await github.rest.issues.get({
+            const pr = await github.rest.pulls.get({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              issue_number: context.issue.number
+              pull_number: context.issue.number,
             })
 
             console.log({pr: pr.data.pull_request})
@@ -49,11 +50,7 @@ jobs:
 
       - name: safety check
         run: |
-          echo "last result: ${{ fromJSON(steps.get-pr.outputs.result) }}"
-          echo "last result: ${{ fromJSON(steps.get-pr.outputs.result).head }}"
-          echo "PR: ${{ fromJSON(steps.get-pr.outputs.result).head.repo.full_name }}"
-          echo "sha: ${{ fromJSON(steps.get-pr.outputs.result).head.sha }}"
-          echo "ref: ${{ fromJSON(steps.get-pr.outputs.result).head.ref }}"
+          echo "last result: ${{ steps.get-pr.outputs.result }}"
 
       - name: checkout PR
         uses: actions/checkout@v3
