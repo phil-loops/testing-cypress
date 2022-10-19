@@ -3,7 +3,7 @@
 // If you're using ESLint on your project, we recommend installing the ESLint Cypress plugin instead:
 // https://github.com/cypress-io/eslint-plugin-cypress
 
-describe("Navigation", () => {
+describe(",,,", () => {
   it("should navigate to the about page", () => {
     // Start from the index page
     cy.visit("http://localhost:3000/");
@@ -20,8 +20,24 @@ describe("Navigation", () => {
     // cy.url().should("include", "/BREAKS THE CHAIN");
   });
 });
+describe("_e-e-e-e-e", () => {
+  it("should navigate to the about page", () => {
+    // Start from the index page
+    cy.visit("http://localhost:3000/");
 
-describe("Navigation part 2", () => {
+    // Find a link with an href attribute containing "about" and click it
+    cy.get('a[href*="about"]').click();
+
+    // The new url should include "/about"
+    cy.url().should("include", "/about");
+
+    // The new page should contain an h1 with "About page"
+    cy.get("h1").contains("About Page");
+
+    // cy.url().should("include", "/BREAKS THE CHAIN");
+  });
+});
+describe(",esese,", () => {
   it("should navigate to the about page", () => {
     // Start from the index page
     cy.visit("http://localhost:3000/");
