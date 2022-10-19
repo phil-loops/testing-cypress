@@ -32,14 +32,21 @@ jobs:
 
     steps:
       - run: echo "I'm running on ${{ needs.pr_commented.outputs.issue_number }}"
-      - name: checkout branch
+
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Checkout Pull Request
         run: hub pr checkout ${{ needs.pr_commented.outputs.issue_number }}
+
       - name: install dependencies
         run: npm install
+
       - name: run cypress
         uses: cypress-io/github-action@v4
         with:
           start: npm run dev
+
       - name: push to vercel
         uses: amondnet/vercel-action@v20
         with:
