@@ -4,6 +4,7 @@ jobs:
   pr_commented:
     # This job only runs for pull request comments
     name: I run on PR comment
+    environment: committing to vercel
     if: github.event.issue.pull_request
     runs-on: ubuntu-latest
     outputs:
@@ -55,8 +56,6 @@ jobs:
     if: needs.pr_commented.outputs.opt_in == 'true'
 
     runs-on: ubuntu-latest
-
-    environment: committing to vercel
 
     steps:
       - name: Checkout repo
