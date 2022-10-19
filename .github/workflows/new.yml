@@ -10,7 +10,7 @@ jobs:
       # opt_in is true if the comment body contains the string "!test"
       opt_in: ${{ contains(github.event.comment.body, '!test') }}
       merge: ${{ contains(github.event.comment.body, '!!test!!') }}
-      ref: ${{ github.event.issue.pull_request.head.ref }}
+      ref: github.event.issue.pull_request.head.ref
 
     steps:
       # print if they opted in or not
