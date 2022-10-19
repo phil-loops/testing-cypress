@@ -42,7 +42,7 @@ jobs:
   run-cypress:
     name: run cypress
     needs: checkout-repo
-    uses: phil-loops/testingt-cypress/.github/workflows/run-cypress-checks.yml@main
+    uses: phil-loops/testing-cypress/.github/workflows/run-cypress-checks.yml@main
 
     # # https://github.com/actions/checkout/issues/331#issuecomment-707103442
     # runs-on: ubuntu-latest
