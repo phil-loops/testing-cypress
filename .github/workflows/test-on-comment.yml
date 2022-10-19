@@ -12,13 +12,10 @@ jobs:
       opt_in: ${{ contains(github.event.comment.body, '!test') }}
       # uncomment to opt in to pushing to vercel
       # merge: ${{ contains(github.event.comment.body, '!!test!!') }}
-      ref: ${{ github.event.comment.pull_request.head.ref }}
 
     steps:
       - name: Check for opt-in
         run: echo "opt_in=${{ contains(github.event.comment.body, '!test') }}" >> $GITHUB_OUTPUT
-      - name: data from comment
-        run: echo "ref=${{ github.event.comment.pull_request.url }}" >> $GITHUB_OUTPUT
 
       - uses: actions/github-script@v3
         id: get-branch
@@ -41,6 +38,9 @@ jobs:
 
       - name: print branch name
         run: echo ${{ steps.get-branch.outputs.result }}
+
+      - name: dump token
+        run: echo ${{ secrets.GH_PAT }}
 
       - name: Checkout PR
         uses: actions/checkout@v3
