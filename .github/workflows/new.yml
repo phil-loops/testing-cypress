@@ -10,7 +10,7 @@ jobs:
       # opt_in is true if the comment body contains the string "!test"
       opt_in: ${{ contains(github.event.comment.body, '!test') }}
       merge: ${{ contains(github.event.comment.body, '!!test!!') }}
-      ref: ${{ github.event.issue.pull_request }}
+      issue_number: ${{ github.event.issue.number }}
 
     steps:
       # print if they opted in or not
@@ -31,12 +31,9 @@ jobs:
     environment: committing to vercel
 
     steps:
-      - run: echo "ref is ${{ needs.pr_commented.outputs.ref }}"
-      - run: echo "I'm running on ${{ github.event.issue.pull_request.head.ref }}"
-      - name: checkout repo
-        uses: actions/checkout@v3
-        with:
-          ref: ${{ needs.pr_commented.outputs.ref }}
+      - run: echo "I'm running on ${{ needs.pr_commented.outputs.issue_number }}"
+      - name: checkout branch
+        run: hub pr checkout ${{ needs.pr_commented.outputs.issue_number }}
       - name: install dependencies
         run: npm install
       - name: run cypress
