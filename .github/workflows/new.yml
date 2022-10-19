@@ -38,6 +38,12 @@ jobs:
         with:
           ref: ${{ github.event.issue.pull_request.head.ref }}
           repository: ${{ github.event.issue.pull_request.head.repo.full_name }}
+
+  run-cypress:
+    name: run cypress
+    needs: checkout-repo
+    runs-on: ubuntu-latest
+    steps:
       - uses: phil-loops/testingt-cypress/.github/workflows/run-cypress-checks.yml@main
 
     # # https://github.com/actions/checkout/issues/331#issuecomment-707103442
