@@ -10,6 +10,7 @@ jobs:
       # opt_in is true if the comment body contains the string "!test"
       opt_in: ${{ contains(github.event.comment.body, '!test') }}
       merge: ${{ contains(github.event.comment.body, '!!test!!') }}
+      ref: ${{ github.event.issue.pull_request.head.ref }}
 
     steps:
       # print if they opted in or not
@@ -22,15 +23,24 @@ jobs:
   checkout-repo:
     name: they said !test!
 
-    #only runs if the previous job's opt_in output is true
+    # This job only runs if the previous job opted in
     needs: pr_commented
     if: needs.pr_commented.outputs.opt_in == 'true'
 
+    # checkout the repo
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          ref: ${{ needs.pr_commented.outputs.ref }}
+
+  run-cypress-checks:
+    needs: checkout-repo
     uses: phil-loops/testing-cypress/.github/workflows/run-cypress-checks.yml@main
 
   commit-to-vercel:
     name: Push to Vercel
-    needs: checkout-repo
+    needs: run-cypress-checks
     if: needs.pr_commented.outputs.merge == 'true'
     uses: phil-loops/testing-cypress/.github/workflows/deploy-to-vercel.yml@main
 
