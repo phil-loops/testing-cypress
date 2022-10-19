@@ -27,28 +27,41 @@ jobs:
     needs: pr_commented
     if: needs.pr_commented.outputs.opt_in == 'true'
 
-    # checkout the repo
     runs-on: ubuntu-latest
+    environment: committing to vercel
+
     steps:
-      - uses: actions/checkout@v3
+      - name: checkout repo
+        uses: actions/checkout@v3
         with:
-          ref: ${{ needs.pr_commented.outputs.ref }}
+          ref: ${{ github.event.issue.pull_request.head.ref }}
+      - name: install dependencies
+        run: npm install
+      - name: run cypress
+        uses: cypress-io/github-action@v4
+        with:
+          start: npm run dev
+      - name: push to vercel
+        uses: amondnet/vercel-action@v20
+        with:
+          ref: ${{ github.event.issue.pull_request.head.ref }}
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID}}
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID}}
 
-  run-cypress-checks:
-    needs: checkout-repo
-    uses: phil-loops/testing-cypress/.github/workflows/run-cypress-checks.yml@main
+    # uses: phil-loops/testing-cypress/.github/workflows/run-cypress-checks.yml@main
 
-  commit-to-vercel:
-    name: Push to Vercel
-    needs: run-cypress-checks
-    if: needs.pr_commented.outputs.merge == 'true'
-    uses: phil-loops/testing-cypress/.github/workflows/deploy-to-vercel.yml@main
+  # commit-to-vercel:
+  #   name: Push to Vercel
+  #   needs: checkout-repo
+  #   if: needs.pr_commented.outputs.merge == 'true'
+  #   uses: phil-loops/testing-cypress/.github/workflows/deploy-to-vercel.yml@main
 
-    secrets: inherit
-  #   steps:
-  #     - uses: actions/checkout@v3
-  #       with:
-  #         ref: ${{ github.event.issue.pull_request.head.ref }}
+  #   secrets: inherit
+  # #   steps:
+  # #     - uses: actions/checkout@v3
+  # #       with:
+  # #         ref: ${{ github.event.issue.pull_request.head.ref }}
   #         repository: ${{ github.event.issue.pull_request.head.repo.full_name }}
 
   # run-cypress:
