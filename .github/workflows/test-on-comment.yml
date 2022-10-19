@@ -43,6 +43,8 @@ jobs:
               issue_number: context.issue.number
             })
 
+            console.log({pr })
+
             return pr.data
 
       - name: safety check
