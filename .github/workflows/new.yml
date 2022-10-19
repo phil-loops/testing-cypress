@@ -13,20 +13,14 @@ jobs:
       issue_number: ${{ github.event.issue.number }}
       ref: ${{ github.event.issue.pull_request.head.ref }}
       repo: ${{ github.event.issue.pull_request.head.repo.full_name }}
+      sha: ${{ github.event.issue.pull_request.head.sha }}
 
     steps:
       # print if they opted in or not
       - run: |
           echo "opt_in: ${{ contains(github.event.comment.body, '!test') }}"
           echo "pr_url: ${{ github.event.issue.pull_request.url }}"
-      - name: Get Branch name
-        id: branchName
-        run: |
-          echo ::set-output name=branch::$(echo $PR_COMMENT | cut -d "[" -f2 | cut -d "]" -f1)
-        env:
-          PR_COMMENT: ${{ github.event.comment.body }}
-      - run: |
-          echo "branch: ${{ steps.branchName.outputs.branch }}"
+          echo "sha: ${{ github.event.issue.pull_request.head.sha }}"
 
   checkout-repo:
     name: they said !test!
@@ -42,9 +36,14 @@ jobs:
       - run: echo "I'm running on ${{ needs.pr_commented.outputs.issue_number }}"
       - run: echo "I'm running on ${{ needs.pr_commented.outputs.ref }}"
       - run: echo "I'm running on ${{ needs.pr_commented.outputs.repo }}"
+      - run: echo "I'm running on ${{ needs.pr_commented.outputs.sha }}"
 
       - name: Checkout
         uses: actions/checkout@v3
+        with:
+          ref: ${{ needs.pr_commented.outputs.ref }}
+          repository: ${{ needs.pr_commented.outputs.repo }}
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Checkout Pull Request
         run: hub pr checkout ${{ needs.pr_commented.outputs.issue_number }}
