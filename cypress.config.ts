@@ -2,7 +2,7 @@ import { defineConfig } from "cypress";
 
 export default defineConfig({
   e2e: {
-    pageLoadTimeout: 10 * 1000,
+    defaultCommandTimeout: 10 * 1000,
     baseUrl: "http://localhost:3000",
   },
 });

@@ -3,7 +3,7 @@
 // If you're using ESLint on your project, we recommend installing the ESLint Cypress plugin instead:
 // https://github.com/cypress-io/eslint-plugin-cypress
 
-describe("Navigation", () => {
+describe(",,,", () => {
   it("should navigate to the about page", () => {
     // Start from the index page
     cy.visit("http://localhost:3000/");
@@ -20,8 +20,7 @@ describe("Navigation", () => {
     // cy.url().should("include", "/BREAKS THE CHAIN");
   });
 });
-
-describe("Navigation part 2", () => {
+describe(",esese,", () => {
   it("should navigate to the about page", () => {
     // Start from the index page
     cy.visit("http://localhost:3000/");
