@@ -12,6 +12,14 @@ jobs:
       # pr_url is the URL of the pull request
       pr_url: ${{ github.event.issue.pull_request.url }}
 
+    steps:
+      # print if they opted in or not
+      - run: |
+          echo "opt_in: ${{ contains(github.event.comment.body, '!test') }}"
+          echo "pr_url: ${{ github.event.issue.pull_request.url }}"
+        env:
+          NUMBER: ${{ github.event.issue.number }}
+
   checkout-repo:
     name: Checkout repo
 
