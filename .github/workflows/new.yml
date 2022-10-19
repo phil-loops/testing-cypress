@@ -12,7 +12,7 @@ jobs:
       merge: ${{ contains(github.event.comment.body, '!!test!!') }}
     steps:
       - name: Check for opt-in
-        run: echo "opt_in=${{ contains(github.event.comment.body, '!test') }}"
+        run: echo "opt_in=${{ contains(github.event.comment.body, '!test') }}" >> $GITHUB_OUTPUT
 
   checkout-repo:
     name: they said !test!
@@ -48,6 +48,9 @@ jobs:
         with:
           repository: ${{ fromJSON(steps.get-pr.outputs.result).head.repo.full_name }}
           ref: ${{ fromJSON(steps.get-pr.outputs.result).head.sha }} # or .head.ref for branch name
+
+      - name: cat new failed
+        run: cat new-failed.txt
 
       - name: install dependencies
         run: npm install
