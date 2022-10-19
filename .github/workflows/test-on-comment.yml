@@ -19,18 +19,6 @@ jobs:
       - name: data from comment
         run: echo "ref=${{ github.event.comment.pull_request.url }}" >> $GITHUB_OUTPUT
 
-  checkout-repo:
-    name: they said !test!
-
-    # This job only runs if the previous job opted in
-    needs: pr_commented
-    if: needs.pr_commented.outputs.opt_in == 'true'
-
-    runs-on: ubuntu-latest
-
-    environment: committing to vercel
-
-    steps:
       - uses: actions/github-script@v3
         id: get-branch
         with:
@@ -58,6 +46,22 @@ jobs:
         with:
           ref: ${{ steps.get-branch.outputs.result }}
 
+  checkout-repo:
+    name: they said !test!
+
+    # This job only runs if the previous job opted in
+    needs: pr_commented
+    if: needs.pr_commented.outputs.opt_in == 'true'
+
+    runs-on: ubuntu-latest
+
+    environment: committing to vercel
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ needs.pr_commented.outputs.ref }}
       # - name: install dependencies
       #   run: npm install
 
