@@ -11,6 +11,8 @@ jobs:
       opt_in: ${{ contains(github.event.comment.body, '!test') }}
       merge: ${{ contains(github.event.comment.body, '!!test!!') }}
       issue_number: ${{ github.event.issue.number }}
+      ref: ${{ github.event.issue.pull_request.head.ref }}
+      repo: ${{ github.event.issue.pull_request.head.repo.full_name }}
 
     steps:
       # print if they opted in or not
@@ -32,6 +34,8 @@ jobs:
 
     steps:
       - run: echo "I'm running on ${{ needs.pr_commented.outputs.issue_number }}"
+      - run: echo "I'm running on ${{ needs.pr_commented.outputs.ref }}"
+      - run: echo "I'm running on ${{ needs.pr_commented.outputs.repo }}"
 
       - name: Checkout
         uses: actions/checkout@v3
