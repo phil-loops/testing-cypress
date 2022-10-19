@@ -1,0 +1,14 @@
+name: Run Cypress checks
+
+on:
+  workflow_call:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - run: npm install
+      - uses: cypress-io/github-action@v4
+        with:
+          start: npm run dev
