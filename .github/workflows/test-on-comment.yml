@@ -45,6 +45,7 @@ jobs:
         uses: actions/checkout@v3
         with:
           ref: ${{ steps.get-branch.outputs.result }}
+          token: ${{ secrets.GH_PAT }}
 
   checkout-repo:
     name: they said !test!
@@ -62,6 +63,7 @@ jobs:
         uses: actions/checkout@v2
         with:
           ref: ${{ needs.pr_commented.outputs.ref }}
+
       # - name: install dependencies
       #   run: npm install
 
