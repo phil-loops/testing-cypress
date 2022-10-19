@@ -20,7 +20,6 @@ describe(",,,", () => {
     // cy.url().should("include", "/BREAKS THE CHAIN");
   });
 });
-
 describe(",esese,", () => {
   it("should navigate to the about page", () => {
     // Start from the index page
