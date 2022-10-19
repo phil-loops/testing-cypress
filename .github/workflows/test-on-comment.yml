@@ -11,9 +11,13 @@ jobs:
       opt_in: ${{ contains(github.event.comment.body, '!test') }}
       # uncomment to opt in to pushing to vercel
       # merge: ${{ contains(github.event.comment.body, '!!test!!') }}
+      ref: ${{ github.event.comment.pull_request.head.ref }}
+
     steps:
       - name: Check for opt-in
         run: echo "opt_in=${{ contains(github.event.comment.body, '!test') }}" >> $GITHUB_OUTPUT
+      - name: data from comment
+        run: echo "ref=${{ github.event.comment.pull_request.url }}" >> $GITHUB_OUTPUT
 
   checkout-repo:
     name: they said !test!
@@ -27,36 +31,10 @@ jobs:
     environment: committing to vercel
 
     steps:
-      - name: find PR
-        uses: actions/github-script@v6
-        id: get-pr
-        with:
-          result-encoding: string
-          script: |
-            console.log('finding PR')
-            console.log(`owner: ${context.repo.owner}`)
-            console.log(`repo: ${context.repo.repo}`)
-            console.log(`issue number: ${context.issue.number}`)
-
-            const pr = await github.rest.pulls.get({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              pull_number: context.issue.number,
-            })
-
-            console.log({pr: pr.data.pull_request})
-
-            return pr.data
-
-      - name: safety check
-        run: |
-          echo "last result: ${{ steps.get-pr.outputs.result }}"
-
       - name: checkout PR
         uses: actions/checkout@v3
         with:
-          repository: ${{ fromJSON(steps.get-pr.outputs.result).head.repo.full_name }}
-          ref: ${{ fromJSON(steps.get-pr.outputs.result).head.sha }}
+          ref: ${{ needs.pr_commented.outputs.ref }}
 
       - name: install dependencies
         run: npm install
