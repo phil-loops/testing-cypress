@@ -32,12 +32,25 @@ jobs:
         id: get-pr
         with:
           script: |
+            console.log('finding PR')
+            console.log("owner: ${context.repo.owner}")
+            console.log("repo: ${context.repo.repo}")
+            console.log("issue number: ${context.issue.number}")
+
             const pr = await github.rest.issues.get({
               owner: context.repo.owner,
               repo: context.repo.repo,
               issue_number: context.issue.number
             })
+
+            console.log({pr})
             return pr.data
+
+      - name: safety check
+        run: |
+          echo "PR: ${{ fromJSON(steps.get-pr.outputs.result).head.repo.full_name }}"
+          echo "sha: ${{ fromJSON(steps.get-pr.outputs.result).head.sha }}"
+          echo "ref: ${{ fromJSON(steps.get-pr.outputs.result).head.ref }}"
 
       - name: checkout PR
         uses: actions/checkout@v3
