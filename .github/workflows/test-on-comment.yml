@@ -23,6 +23,8 @@ jobs:
           git config --global user.name 'Your Name'
           git config --global user.email 'your-username@users.noreply.github.com'
           echo "this is my newfile.txt" >> newfile.txt
-          git add --all
+          touch README
+          git add README
+          git add .
           git commit -m "Automated report"
-          git push --force origin vercel-deployment
+          git push origin vercel-deployment  --force
