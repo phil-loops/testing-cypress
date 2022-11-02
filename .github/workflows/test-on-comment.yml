@@ -12,7 +12,5 @@ jobs:
         run: date +%s > report.txt
       - name: Commit report
         run: |
-          git config --global user.name 'Loopsbot'
-          git config --global user.email 'help@loops.so'
           git reset --hard origin/main
           git push origin vercel-deployment --force
