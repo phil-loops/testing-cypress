@@ -6,6 +6,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
         with:
+          fetch-depth: 0
           ref: "vercel-deployment"
       - name: Commit report
         run: |
