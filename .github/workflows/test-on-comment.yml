@@ -15,19 +15,12 @@ jobs:
     needs: [chekcout]
     runs-on: ubuntu-20.04
     steps:
-      - uses: actions/checkout@v3
-        with:
-          ref: main
-          fetch-depth: 0
-      - name: run git
+      - uses: actions/checkout@v2
+      - name: Create report file
+        run: date +%s > report.txt
+      - name: Commit report
         run: |
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git config --global user.name "github-actions[bot]"
-          git add .
-          git commit -m "Update deployment branch"
-
-      - name: Push changes
-        uses: ad-m/github-push-action@master
-        with:
-          github_token: $
-          branch: vercel-deployment
+          git config --global user.name 'Your Name'
+          git config --global user.email 'your-username@users.noreply.github.com'
+          git commit -am "Automated report"
+          git push
