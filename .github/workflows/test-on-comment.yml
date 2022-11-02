@@ -14,5 +14,6 @@ jobs:
         run: |
           git config --global user.name 'Loopsbot'
           git config --global user.email 'help@loops.so'
+          git pull
           git reset --hard origin/main
           git push
