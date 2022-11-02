@@ -1,19 +1,8 @@
-name: Compile + Lint
-
-on:
-  push:
-    branches:
-      - main
-
+name: Push commit
+on: push
 jobs:
-  chekcout:
-    runs-on: ubuntu-20.04
-    steps:
-      - uses: actions/checkout@v3
-
-  push-to-deployment-branch:
-    needs: [chekcout]
-    runs-on: ubuntu-20.04
+  report:
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - name: Create report file
@@ -22,9 +11,5 @@ jobs:
         run: |
           git config --global user.name 'Your Name'
           git config --global user.email 'your-username@users.noreply.github.com'
-          echo "this is my newfile.txt" >> newfile.txt
-          touch README
-          git add README
-          git add .
-          git commit -m "Automated report"
-          git push origin vercel-deployment  --force
+          git commit -am "Automated report"
+          git push
