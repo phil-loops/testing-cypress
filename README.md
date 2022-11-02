@@ -1,5 +1,7 @@
 # Next.js + Cypress
 
+yoyoy
+
 This example shows how to configure Cypress to work with Next.js.
 
 ## Deploy your own
