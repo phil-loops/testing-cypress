@@ -11,7 +11,8 @@ jobs:
       - name: Create report file
         run: date +%s > report.txt
       - name: Commit report
-        run: git config --global user.name 'Loopsbot'
-        run: git config --global user.email 'help@loops.so'
-        run: git reset --hard origin/main
-        run: git push origin vercel-deployment --force
+        run: |
+          git config --global user.name 'Loopsbot'
+          git config --global user.email 'help@loops.so'
+          git reset --hard origin/main
+          git push origin vercel-deployment --force
