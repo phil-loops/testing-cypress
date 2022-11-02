@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - main
-      - loo-960-opt-in-cypress
 
 jobs:
   chekcout:
