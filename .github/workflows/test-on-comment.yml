@@ -20,6 +20,5 @@ jobs:
         run: |
           git config --global user.name 'Loopsbot'
           git config --global user.email 'help@loops.so'
-          git checkout vercel-deployment
-          git reset main --hard
-          git push origin vercel-deployment --force
+          git reset origin/main --hard
+          git push --force
