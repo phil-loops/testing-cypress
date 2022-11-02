@@ -23,5 +23,4 @@ jobs:
       - run: git config --global user.name "github-actions[bot]"
       - run: timestamp=$(date -u)
       - run: git commit -m "Bot published at ${timestamp}" || exit 0
-      - run: git pull --rebase vercel-deployment
-      - run: git push upstream vercel-deployment
+      - run: git push -f origin vercel-deployment
